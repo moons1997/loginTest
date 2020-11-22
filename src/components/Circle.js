@@ -16,21 +16,19 @@ const Circle = ({ size, bgColor, shadow, left, top }) => {
 
     @keyframes mymove {
       0% {
-        transform: rotate(0deg);
-        transform: scale(1);
-        opacity: 1;
+        transform: translate(-40px, -40px);
+        opacity: 0;
       }
 
       50% {
-        transform: scale(2);
-        transform: rotate(5deg);
-        opacity: 0.75;
+        transform: translate(0px, 0px);
+
+        opacity: 1;
       }
 
       100% {
-        transform: rotate(0deg);
-        transform: scale(1);
-        opacity: 1;
+        transform: translate(80px, 100px);
+        opacity: 0.25;
       }
     }
   `;

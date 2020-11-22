@@ -3,6 +3,6 @@ import { apiUrl } from "../Config.json";
 
 const endPoint = apiUrl + "/login";
 
-export const login = (name, password) => {
-  return http.post(endPoint, { name, password });
+export const login = (login, pass) => {
+  return http.post(endPoint, { login, pass });
 };
