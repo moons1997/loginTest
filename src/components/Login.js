@@ -1,11 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Form, Button } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
-import RenderInput from "../utils/RenderInput";
 import { login as enter } from "../services/loginServices";
 import _ from "lodash";
-import { contextApi } from "../services/Context";
+import FormComp from "./FormComp";
 const LoginWrapper = styled.div`
   width: 415px;
   margin: 0 auto;
@@ -20,9 +17,7 @@ const Login = ({ textColor, inputBg }) => {
   const [login, setLogin] = useState("");
   const [pass, setPass] = useState("");
   const [errors, setErrors] = useState("");
-  const { addStatus } = useContext(contextApi);
 
-  let history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -46,12 +41,14 @@ const Login = ({ textColor, inputBg }) => {
       const { data: jwt } = await enter(login, pass);
 
       localStorage.setItem("token", JSON.stringify(jwt));
+
       const status = _.get(
         JSON.parse(localStorage.getItem("token")),
         "user.status"
       );
-      addStatus(status);
-      history.replace(`${status}`);
+      console.log(status);
+
+      window.location = `${status}`;
     } catch (error) {
       setErrors(error.response.data.msg);
     }
@@ -63,32 +60,16 @@ const Login = ({ textColor, inputBg }) => {
         Hello.
         <br /> Welcome Back
       </h1>
-      <Form onSubmit={handleSubmit}>
-        <RenderInput
-          label="Name"
-          name="name"
-          onChange={handleChange}
-          valu={login}
-          textColor={textColor}
-          inputBg={inputBg}
-        />
-        <RenderInput
-          label="Password"
-          type="password"
-          name="password"
-          onChange={handleChange}
-          valu={pass}
-          textColor={textColor}
-          inputBg={inputBg}
-        />
-        <Form.Text className="text-muted mb-5">
-          <Link to="/">Forgot Password?</Link>
-        </Form.Text>
-        {errors && <div className="alert alert-danger">{errors}</div>}
-        <Button variant="primary" type="submit" onClick={doSubmit}>
-          Login
-        </Button>
-      </Form>
+      <FormComp
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        login={login}
+        pass={pass}
+        textColor={textColor}
+        inputBg={inputBg}
+        doSubmit={doSubmit}
+        errors={errors}
+      />
     </LoginWrapper>
   );
 };

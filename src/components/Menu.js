@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
-import { Navbar, Nav, NavDropdown, Form } from "react-bootstrap";
+import { Navbar, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BiExit } from "react-icons/bi";
 import { contextApi } from "../services/Context";
 import styled from "styled-components";
+import Navs from "./Navs";
 
-const Menu = ({ textColor }) => {
-  const { menu, menuChild, status, logOut, changeLight, light } = useContext(
+const Menu = ({ textColor, status }) => {
+  const { menu, menuChild, logOut, changeLight, light } = useContext(
     contextApi
   );
   const MenuWrapper = styled.div`
@@ -47,6 +48,7 @@ const Menu = ({ textColor }) => {
         <Navbar.Brand>
           <Link to="/">Brand</Link>
         </Navbar.Brand>
+
         <div className="mob ml-auto">
           {status ? (
             <div>
@@ -71,37 +73,12 @@ const Menu = ({ textColor }) => {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            {menu.map(
-              (item) =>
-                item.type === status &&
-                (item.child ? (
-                  <NavDropdown
-                    title={item.title}
-                    id="basic-nav-dropdown"
-                    key={item.id}
-                  >
-                    {item.child &&
-                      menuChild.map(
-                        (child) =>
-                          item.id === child.parentId && (
-                            <NavDropdown.Item href={child.url} key={child.id}>
-                              {child.title}
-                            </NavDropdown.Item>
-                          )
-                      )}
-                  </NavDropdown>
-                ) : (
-                  <Nav.Link href={item.url} key={item.id}>
-                    {item.title}
-                  </Nav.Link>
-                ))
-            )}
-          </Nav>
+          <Navs menu={menu} menuChild={menuChild} status={status} />
+
           <div className="deck">
             {status ? (
               <div>
-                {status}
+                <Link to={status}>{status}</Link>
                 <Link onClick={logOut} to="/" className="ml-3">
                   <BiExit size={"25"} />
                 </Link>
@@ -109,12 +86,12 @@ const Menu = ({ textColor }) => {
             ) : (
               <Link to="/login">login</Link>
             )}
+
             <Form className="form_m">
               <Form.Check
                 type="switch"
                 id="custom-switch"
                 checked={light}
-                // defaultChecked={true}
                 onChange={changeLight}
               />
             </Form>

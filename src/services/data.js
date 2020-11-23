@@ -14,8 +14,8 @@ export const menu = [
   {
     id: 3,
     type: "king",
-    url: "/",
-    title: "king 3",
+    url: "/login",
+    title: "check user",
     child: false,
   },
 

@@ -1,22 +1,21 @@
-import { set } from "lodash";
 import React, { createContext, useState } from "react";
 import { menu as dataMenu } from "./data";
 import { menuChild as dataChild } from "./data";
 export const contextApi = createContext();
 
 const Context = ({ children }) => {
-  const [status, setStatus] = useState("");
   const [menu] = useState(dataMenu);
   const [menuChild] = useState(dataChild);
   const [light, setLight] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
-  const addStatus = (status) => {
-    setStatus(status);
-  };
   const logOut = () => {
     localStorage.removeItem("token");
-    setStatus("");
+    window.location = "/";
+  };
+  const logOutUser = () => {
+    localStorage.removeItem("userToken");
+    window.location = "/king";
   };
   const changeLight = () => {
     setLight(!light);
@@ -29,8 +28,6 @@ const Context = ({ children }) => {
   return (
     <contextApi.Provider
       value={{
-        addStatus,
-        status,
         logOut,
         menu,
         menuChild,
@@ -38,6 +35,7 @@ const Context = ({ children }) => {
         changeLight,
         showPassToggle,
         showPass,
+        logOutUser,
       }}
     >
       {children}

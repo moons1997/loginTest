@@ -10,9 +10,14 @@ import Worker from "./components/admin/Worker";
 import { contextApi } from "./services/Context";
 import "bootstrap/dist/css/bootstrap.css";
 import styled from "styled-components";
+import _ from "lodash";
 
 function App() {
-  const { status, light } = useContext(contextApi);
+  const { light } = useContext(contextApi);
+  const status = _.get(
+    JSON.parse(localStorage.getItem("token")),
+    "user.status"
+  );
   let bgColor;
   let shadowColor;
   let color;
@@ -49,7 +54,7 @@ function App() {
   return (
     <AppWrapper>
       <div className="mine_page">
-        <Menu textColor={color} />
+        <Menu textColor={color} status={status} />
         <Circle
           size="195"
           bgColor={bgColor}
@@ -95,22 +100,36 @@ function App() {
           top="65"
         />
         <Switch>
+          {status === "king" && (
+            <>
+              <Route
+                path="/king"
+                component={() => (
+                  <King user={status} textColor={color} inputBg={inputBg} />
+                )}
+              />
+            </>
+          )}
+          {status === "worker" && (
+            <>
+              <Route
+                path="/worker"
+                component={() => <Worker user={status} />}
+              />
+            </>
+          )}
+          {status === "buxgalter" && (
+            <>
+              <Route
+                path="/buxgalter"
+                component={() => <Accountant user={status} />}
+              />
+            </>
+          )}
           <Route
             path="/login"
             component={() => <Login textColor={color} inputBg={inputBg} />}
           />
-          {status === "king" && (
-            <Route path="/king" component={() => <King user={status} />} />
-          )}
-          {status === "worker" && (
-            <Route path="/worker" component={() => <Worker user={status} />} />
-          )}
-          {status === "buxgalter" && (
-            <Route
-              path="/buxgalter"
-              component={() => <Accountant user={status} />}
-            />
-          )}
 
           <Redirect from="/" to="/" />
         </Switch>
